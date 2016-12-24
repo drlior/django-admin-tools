@@ -12,8 +12,7 @@ class Command(BaseCommand):
     label = 'application name'
 
     def handle(self, file=None, **options):
-        context = {}
-        context['project'] = os.path.basename(os.getcwd())
+        context = {'project': os.path.basename(os.getcwd())}
         tpl = [
             'dashboard/dashboard.txt',
             'admin_tools/dashboard/dashboard.txt'

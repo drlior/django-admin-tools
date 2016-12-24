@@ -57,3 +57,4 @@ the admin site being used::
         'django.contrib.admin.site': 'yourproject.django_admin_menu.CustomMenu',
         'yourproject.admin.admin_site': 'yourproject.my_admin_menu.CustomMenu',
     }
+

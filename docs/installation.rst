@@ -8,7 +8,7 @@ Requirements
 
 Before installing django-admin-tools, you'll need to have a copy of
 `Django <http://www.djangoproject.com>`_ already installed. For the
-|version| release, Django 1.7 or newer is required.
+release version, Django 1.7 or newer is required.
 
 .. note::
     *Important note to users of django 1.6 or below:*

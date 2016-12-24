@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from admin_tools.menu import items, Menu
 
+
 # to activate your custom menu add the following to your settings.py:
 #
 # ADMIN_TOOLS_MENU = 'test_proj.menu.CustomMenu'
@@ -10,6 +11,7 @@ class CustomMenu(Menu):
     """
     Custom Menu for test_proj admin site.
     """
+
     class Media:
         css = {
             'all': ('test_app/menu.css',),

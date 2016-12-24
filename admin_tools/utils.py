@@ -1,26 +1,22 @@
 """
 Admin ui common utilities.
 """
+import warnings
 from fnmatch import fnmatch
 
 from django.conf import settings
 from django.contrib import admin
 from django.core.urlresolvers import reverse
-try:
-    from importlib import import_module
-except ImportError:
-    # Django < 1.9 and Python < 2.7
-    from django.utils.importlib import import_module
-import warnings
+from importlib import import_module
 
 
 def uniquify(value, seen_values):
     """ Adds value to seen_values set and ensures it is unique """
-    id = 1
+    _id = 1
     new_value = value
     while new_value in seen_values:
-        new_value = "%s%s" % (value, id)
-        id += 1
+        new_value = "%s%s" % (value, _id)
+        _id += 1
     seen_values.add(new_value)
     return new_value
 
@@ -73,8 +69,8 @@ def filter_models(request, models, exclude):
     items = get_avail_models(request)
     included = []
 
-    def full_name(model):
-        return '%s.%s' % (model.__module__, model.__name__)
+    def full_name(_model):
+        return '%s.%s' % (_model.__module__, _model.__name__)
 
     # I beleive that that implemented
     # O(len(patterns)*len(matched_patterns)*len(all_models))
@@ -93,8 +89,7 @@ def filter_models(request, models, exclude):
                 if model_str == pattern:
                     # exact match
                     included.append(item)
-                elif fnmatch(model_str, pattern) and \
-                        item not in wildcard_models:
+                elif fnmatch(model_str, pattern) and item not in wildcard_models:
                     # wildcard match, put item in separate list so it can be
                     # sorted alphabetically later
                     wildcard_models.append(item)
@@ -123,31 +118,37 @@ class AppListElementMixin(object):
     AppListMenuItem (to honor the DRY concept).
     """
 
+    def __init__(self):
+        self.exclude_list = None
+        self.include_list = None
+        self.models = None
+        self.exclude = None
+
     def _visible_models(self, request):
         # compatibility layer: generate models/exclude patterns
         # from include_list/exclude_list args
 
         if self.include_list:
             warnings.warn(
-               "`include_list` is deprecated for ModelList and AppList and "
-               "will be removed in future releases. Please use `models` "
-               "instead.",
-               DeprecationWarning
+                "`include_list` is deprecated for ModelList and AppList and "
+                "will be removed in future releases. Please use `models` "
+                "instead.",
+                DeprecationWarning
             )
 
         if self.exclude_list:
             warnings.warn(
-               "`exclude_list` is deprecated for ModelList and AppList and "
-               "will be removed in future releases. Please use `exclude` "
-               "instead.",
-               DeprecationWarning
+                "`exclude_list` is deprecated for ModelList and AppList and "
+                "will be removed in future releases. Please use `exclude` "
+                "instead.",
+                DeprecationWarning
             )
 
         included = self.models[:]
-        included.extend([elem+"*" for elem in self.include_list])
+        included.extend([elem + "*" for elem in self.include_list])
 
         excluded = self.exclude[:]
-        excluded.extend([elem+"*" for elem in self.exclude_list])
+        excluded.extend([elem + "*" for elem in self.exclude_list])
         if self.exclude_list and not included:
             included = ["*"]
         return filter_models(request, included, excluded)

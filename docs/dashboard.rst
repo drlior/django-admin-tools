@@ -42,37 +42,37 @@ The ``DashboardModule`` class
     :members:
 
 The ``Group`` class
-------------------------------------
+-------------------
 
 .. autoclass:: admin_tools.dashboard.modules.Group
     :members:
 
 The ``LinkList`` class
--------------------------------------
+----------------------
 
 .. autoclass:: admin_tools.dashboard.modules.LinkList
     :members:
 
 The ``AppList`` class
-------------------------------------
+---------------------
 
 .. autoclass:: admin_tools.dashboard.modules.AppList
     :members:
 
 The ``ModelList`` class
---------------------------------------
+-----------------------
 
 .. autoclass:: admin_tools.dashboard.modules.ModelList
     :members:
 
 The ``RecentActions`` class
-------------------------------------------
+---------------------------
 
 .. autoclass:: admin_tools.dashboard.modules.RecentActions
     :members:
 
 The ``Feed`` class
----------------------------------
+------------------
 
 .. autoclass:: admin_tools.dashboard.modules.Feed
     :members:

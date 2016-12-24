@@ -37,12 +37,16 @@ def admin_tools_render_dashboard(context, location='index', dashboard=None):
         An instance of ``Dashboard``, if not given, the dashboard is retrieved
         with the ``get_index_dashboard`` or ``get_app_index_dashboard``
         functions, depending on the ``location`` argument.
+        :param context:
+        :param location:
+        :param dashboard: Dashboard
+        :return:
     """
     if dashboard is None:
         dashboard = get_dashboard(context, location)
 
     dashboard.init_with_context(context)
-    dashboard._prepare_children()
+    dashboard.public_prepare_children()
 
     try:
         preferences = DashboardPreferences.objects.get(

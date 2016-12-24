@@ -1,8 +1,6 @@
-try:
-    from urllib.parse import unquote
-except ImportError:
-    # Python 2 compatibility
-    from urllib import unquote
+
+from urllib.parse import unquote
+
 
 from django import forms
 
@@ -25,9 +23,7 @@ class BookmarkForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         bookmark = super(BookmarkForm, self).save(
-            commit=False,
-            *args,
-            **kwargs
+            False
         )
         bookmark.user = self.user
         bookmark.save()

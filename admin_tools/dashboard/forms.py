@@ -17,8 +17,6 @@ class DashboardPreferencesForm(forms.ModelForm):
     def save(self, *args, **kwargs):
         preferences = super(DashboardPreferencesForm, self).save(
             commit=False,
-            *args,
-            **kwargs
         )
         preferences.user = self.user
         preferences.dashboard_id = self.dashboard_id

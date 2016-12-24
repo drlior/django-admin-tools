@@ -16,12 +16,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'testdb.sqlite',               # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'testdb.sqlite',  # Or path to database file if using sqlite3.
+        'USER': '',  # Not used with sqlite3.
+        'PASSWORD': '',  # Not used with sqlite3.
+        'HOST': '',  # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',  # Set to empty string for default. Not used with sqlite3.
     }
 }
 
@@ -79,7 +79,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -102,6 +102,7 @@ WSGI_APPLICATION = 'test_proj.wsgi.application'
 
 import django
 from distutils.version import LooseVersion
+
 version = django.get_version()
 use_older_syntax = LooseVersion(django.get_version()) < LooseVersion('1.8')
 if use_older_syntax:
@@ -177,11 +178,11 @@ INSTALLED_APPS = [
 
 try:
     import django_coverage
+
     TEST_RUNNER = 'django_coverage.coverage_runner.CoverageRunner'
     COVERAGE_REPORT_HTML_OUTPUT_DIR = os.path.join(PROJECT_PATH, '_coverage')
 except ImportError:
     TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-
 
 ADMIN_TOOLS_INDEX_DASHBOARD = 'test_proj.dashboard.CustomIndexDashboard'
 ADMIN_TOOLS_MENU = 'test_proj.menu.CustomMenu'

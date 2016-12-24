@@ -3,11 +3,7 @@ Module where admin tools dashboard classes are defined.
 """
 
 from django.template.defaultfilters import slugify
-try:
-    from importlib import import_module
-except ImportError:
-    # Django < 1.9 and Python < 2.7
-    from django.utils.importlib import import_module
+from importlib import import_module
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.utils.encoding import force_text
@@ -115,12 +111,15 @@ class Dashboard(object):
         """
         return 'dashboard'
 
+    def public_prepare_children(self):
+        return self._prepare_children()
+
     def _prepare_children(self):
         """ Enumerates children without explicit id """
         seen = set()
         for id, module in enumerate(self.children):
-            module.id = uniquify(module.id or str(id+1), seen)
-            module._prepare_children()
+            module.id = uniquify(module.id or str(id + 1), seen)
+            module.public_prepare_children()
 
 
 class AppIndexDashboard(Dashboard):
@@ -226,6 +225,7 @@ class DefaultIndexDashboard(Dashboard):
     And then set the ``ADMIN_TOOLS_INDEX_DASHBOARD`` settings variable to
     point to your custom index dashboard class.
     """
+
     def init_with_context(self, context):
         site_name = get_admin_site_name(context)
         # append a link list module for "quick links"

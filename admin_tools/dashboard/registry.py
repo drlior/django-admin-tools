@@ -2,6 +2,8 @@
 Dashboard registry.
 """
 
+from importlib.abc import PathEntryFinder
+
 
 class Registry(object):
     """
@@ -19,6 +21,7 @@ class Registry(object):
                 app_name
             )
         cls.registry[app_name] = klass
+
     register = classmethod(register)
 
 
@@ -29,19 +32,17 @@ def register(cls, *args, **kwargs):
     Registry.register(cls, *args, **kwargs)
 
 
-def autodiscover(blacklist=[]):
+def autodiscover(blacklist=None):
     """
     Automagically discover custom dashboards and menus for installed apps.
     Optionally you can pass a ``blacklist`` of apps that you don't want to
     provide their own app index dashboard.
     """
-    import imp
+    if blacklist is None:
+        blacklist = []
     from django.conf import settings
-    try:
-        from importlib import import_module
-    except ImportError:
-        # Django < 1.9 and Python < 2.7
-        from django.utils.importlib import import_module
+
+    from importlib import import_module
 
     blacklist.append('admin_tools.dashboard')
     blacklist.append('admin_tools.menu')
@@ -60,7 +61,7 @@ def autodiscover(blacklist=[]):
 
         # try to find a app.dashboard module
         try:
-            imp.find_module('dashboard', app_path)
+            PathEntryFinder.find_module('dashboard', app_path)
         except ImportError:
             continue
 

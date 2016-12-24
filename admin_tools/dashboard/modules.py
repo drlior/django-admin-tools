@@ -1,13 +1,9 @@
 """
 Module where admin tools dashboard modules classes are defined.
 """
-
+import feedparser
 from django.apps import apps as django_apps
-from django.core.urlresolvers import reverse
 from django.forms.utils import flatatt
-
-from django.utils.itercompat import is_iterable
-from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
 
 from admin_tools.utils import AppListElementMixin, uniquify
@@ -278,7 +274,7 @@ class Group(DashboardModule):
         for id, module in enumerate(self.children):
             proposed_id = "%s_%s" % (self.id, module.id or id+1)
             module.id = uniquify(proposed_id, seen)
-            module._prepare_children()
+            module.public_prepare_children()
 
 
 class LinkList(DashboardModule):
@@ -451,8 +447,7 @@ class AppList(DashboardModule, AppListElementMixin):
                     'url': self._get_admin_app_list_url(model, context),
                     'models': []
                 }
-            model_dict = {}
-            model_dict['title'] = model._meta.verbose_name_plural
+            model_dict = {'title': model._meta.verbose_name_plural}
             if perms['change']:
                 model_dict['change_url'] = self._get_admin_change_url(
                     model,
@@ -537,8 +532,7 @@ class ModelList(DashboardModule, AppListElementMixin):
         if not items:
             return
         for model, perms in items:
-            model_dict = {}
-            model_dict['title'] = model._meta.verbose_name_plural
+            model_dict = {'title': model._meta.verbose_name_plural}
             if perms['change']:
                 model_dict['change_url'] = self._get_admin_change_url(
                     model,
@@ -550,10 +544,8 @@ class ModelList(DashboardModule, AppListElementMixin):
         if self.extra:
             # TODO - permissions support
             for extra_url in self.extra:
-                model_dict = {}
-                model_dict['title'] = extra_url['title']
-                model_dict['change_url'] = extra_url['change_url']
-                model_dict['add_url'] = extra_url.get('add_url', None)
+                model_dict = {'title': extra_url['title'], 'change_url': extra_url['change_url'],
+                              'add_url': extra_url.get('add_url', None)}
                 self.children.append(model_dict)
 
         self._initialized = True
@@ -640,7 +632,7 @@ class RecentActions(DashboardModule):
                 if qset is None:
                     qset = current_qset
                 else:
-                    qset = qset | current_qset
+                    qset |= current_qset
             return qset
 
         if request.user is None:
@@ -716,14 +708,16 @@ class Feed(DashboardModule):
         import datetime
         if self.feed_url is None:
             raise ValueError('You must provide a valid feed URL')
-        try:
-            import feedparser
-        except ImportError:
-            self.children.append({
-                'title': ('You must install the FeedParser python module'),
-                'warning': True,
-            })
-            return
+
+
+        # try:
+        #     import feedparser
+        # except ImportError:
+        #     self.children.append({
+        #         'title': 'You must install the FeedParser python module',
+        #         'warning': True,
+        #     })
+        #    return
 
         feed = feedparser.parse(self.feed_url)
         if self.limit is not None:

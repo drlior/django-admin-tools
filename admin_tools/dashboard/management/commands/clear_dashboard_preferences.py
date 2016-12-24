@@ -7,4 +7,4 @@ class Command(BaseCommand):
     help = """Clears dashboard preferences."""
 
     def handle(self, *args, **options):
-        DashboardPreferences._default_manager.all().delete()
+        DashboardPreferences.public_prepare_children.all().delete()
